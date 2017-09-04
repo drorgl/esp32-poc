@@ -5,6 +5,7 @@
  *
  */
 
+
  #define CONFIG_BROWNOUT_DET_LVL 7
  #define CONFIG_GATTC_ENABLE 1
  #define CONFIG_ESP32_PHY_MAX_TX_POWER 20

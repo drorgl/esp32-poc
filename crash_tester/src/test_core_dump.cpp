@@ -6,17 +6,16 @@
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
    CONDITIONS OF ANY KIND, either express or implied.
 */
+//#define __STDC__
+
 #include <stdio.h>
+
 #include <string.h>
 #include <esp_log.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <esp_system.h>
 #include <nvs_flash.h>
-// #include <rom/rtc.h>
-// #include <esp_partition.h>
-// #include <rom/crc.h>
-// #include <mbedtls/base64.h>
 // #include <esp_spi_flash.h>
 
 #include <CrashHandler.hpp>
@@ -27,97 +26,6 @@
 #define TCI_FAIL_ASSERT 0x4
 
 volatile unsigned long crash_flags = TCI_UNALIGN_PTR;
-
-// void check_core_dump(){
-//     auto reset_reason0 = rtc_get_reset_reason(0);
-//     #if !CONFIG_FREERTOS_UNICORE
-//     auto reset_reason1 = rtc_get_reset_reason(1);
-//     #else
-//     auto reset_reason1 = RESET_REASON::NO_MEAN;
-//     #endif
-
-//     if ((reset_reason0 != RESET_REASON::NO_MEAN) ||
-//         (reset_reason1 != RESET_REASON::NO_MEAN)){
-//             //crash detected
-//             printf("reset reason detected %d and %d\r\n",reset_reason0, reset_reason1);
-//     }
-
-//     //check for core dump partition
-//     auto core_part = esp_partition_find_first(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_COREDUMP, NULL);
-//     if (!core_part)
-//     {
-//         printf("No core dump partition found!\r\n");
-//         return;
-//     }
-//     printf("Found partition '%s' @ %x %d bytes\r\n", core_part->label, core_part->address, core_part->size);
-
-//     //check if core dump is present in the eeprom
-//     const void *result = NULL;
-//     spi_flash_mmap_handle_t ota_data_map;
-
-//     auto ret = esp_partition_mmap(core_part, 0, core_part->size, SPI_FLASH_MMAP_DATA, &result, &ota_data_map);
-//     if (ret != ESP_OK) {
-//         result = NULL;
-//         return;
-//     } else {
-//         uint32_t checksum = 0;
-//         for (auto i = 0; i <core_part->size;i++ ){
-//             checksum += ((uint8_t*)result)[i];
-//             printf("%02X",((uint8_t*)result)[i]);
-//             if ((i % 64) == 0){
-//                 printf("\r\n");
-//                 vTaskDelay(0);
-//             }
-            
-//         }
-//         printf("Core Dump Partition Checksum %d\r\n", checksum);
-
-//         //usable size: SPI_FLASH_SEC_SIZE
-        
-//         if (checksum != 0){
-//             spi_flash_munmap(ota_data_map);
-//             printf("Core Dump Partition is not empty, erasing...");
-//             auto erase_result = esp_partition_erase_range(core_part,0,core_part->size);
-//             printf("done: %d\r\n", erase_result);
-//             vTaskDelay(10000 / portTICK_PERIOD_MS);
-
-
-//             auto ret = esp_partition_mmap(core_part, 0, core_part->size, SPI_FLASH_MMAP_DATA, &result, &ota_data_map);
-//             if (ret != ESP_OK) {
-//                 result = NULL;
-//                 return;
-//             } else {
-                
-//                 // for (auto i = 0; i <core_part->size;i+=sizeof(uint32_t) ){
-//                 //     ((uint32_t*)result)[i] = 0;        
-//                 // }
-
-//                 uint32_t checksum = 0;
-//                 for (auto i = 0; i <core_part->size;i++ ){
-//                     checksum += ((uint8_t*)result)[i];
-//                     printf("%02X",((uint8_t*)result)[i]);
-//                     if ((i % 64) == 0){
-//                         printf("\r\n");
-//                         vTaskDelay(0);
-//                     }
-//                 }
-//                 printf("Core Dump Partition Checksum after clear %d\r\n", checksum);
-//             }
-//         }
-
-
-
-//         spi_flash_munmap(ota_data_map);
-//     }
-    
-
-//     //core_dump.address
-//     //core_dump.size
-//     //if so, dump to screen and clean up
-
-// }
-
-
 
 void bad_ptr_func()
 {
