@@ -1,0 +1,8 @@
+platformio.vcxproj.user
+platformio.sln
+platformio.vcxproj
+platformio.vcxproj.filters
+.vs
+.vscode
+Debug
+Release
